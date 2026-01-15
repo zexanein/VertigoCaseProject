@@ -1,6 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class SpinWheel : MonoBehaviour
 {
@@ -22,5 +23,13 @@ public class SpinWheel : MonoBehaviour
         _spinTween =
             spinWheelTransform.DORotate(new Vector3(0, 0, -rotateAngle), 2f, RotateMode.FastBeyond360)
             .SetEase(Ease.InOutCubic);
+    }
+
+    private void OnValidate()
+    {
+        if (spinButton == null)
+        {
+            spinButton = transform.parent.Find("ui_button_spin").GetComponent<Button>();
+        }
     }
 }
