@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b411a68c10619a54981bede9d91630ae, type: 3}
-  m_Name: Reward Item
+  m_Name: cash
   m_EditorClassIdentifier: 
-  rewardName: 
-  rewardIcon: {fileID: 0}
-  rewardAmount: 0
+  rewardId: cash
+  rewardIcon: {fileID: 21300000, guid: 9ef33227972ecdb479aaf29180cd54ed, type: 3}
+  rewardAmount: 100
   rewardRarity: 0
