@@ -22,7 +22,7 @@ public class SpinWheelMenuController : MonoBehaviour
         if (spinButton == null)
         {
             spinWheel = transform.Find("ui_spinwheel").GetComponent<SpinWheel>();
-            spinButton = transform.Find("ui_button_spin").GetComponent<Button>();
+            spinButton = transform.Find("ui_button_spinwheel_spin").GetComponent<Button>();
         }
     }
 
