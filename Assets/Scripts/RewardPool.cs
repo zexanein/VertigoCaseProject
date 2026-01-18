@@ -32,9 +32,11 @@ public class RewardInfo
     public RewardItem rewardItem;
     public int minAmount;
     public int maxAmount;
+    private int _amount;
+    public int Amount => _amount;
     
-    public int GetRandomAmount()
+    public void RecalculateAmount()
     {
-        return Random.Range(minAmount, maxAmount);
+        _amount = Random.Range(minAmount, maxAmount);
     }
 }

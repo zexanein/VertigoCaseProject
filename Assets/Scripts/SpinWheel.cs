@@ -52,7 +52,8 @@ public class SpinWheel : MonoBehaviour
             }
 
             var reward = _rewards[i];
-            createdItem.SetRewardVisual(reward.rewardItem.RewardIcon, reward.GetRandomAmount());
+            reward.RecalculateAmount();
+            createdItem.SetRewardVisual(reward.rewardItem.RewardIcon, reward.Amount);
         }
     }
 
