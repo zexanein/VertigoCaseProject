@@ -68,6 +68,19 @@ public class EndlessNumberLayout : MonoBehaviour
         UpdateBackgroundColor();
     }
     
+    public void ResetValue()
+    {
+        Value = 1;
+        _lastNumber = 1;
+        _numberTexts.Clear();
+        foreach (Transform child in numbersTextsContent)
+        {
+            Destroy(child.gameObject);
+        }
+        CreateNumberTexts();
+        UpdateBackgroundColor(true);
+    }
+    
     private void UpdateBackgroundColor(bool instant = false)
     {
         var isSafeZone = Value % _safeZoneFactor == 0;

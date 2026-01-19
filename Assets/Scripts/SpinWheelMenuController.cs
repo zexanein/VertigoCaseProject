@@ -17,6 +17,7 @@ public class SpinWheelMenuController : MonoBehaviour
     
     // Endless Zone Number Display
     [SerializeField] private EndlessNumberLayout endlessNumberTextLayout;
+    [SerializeField] private ConsentMenu bombExplosionMenu;
     
     [SerializeField] private SpinWheelVisualData normalSpinWheelVisualData;
     [SerializeField] private SpinWheelVisualData safeSpinWheelVisualData;
@@ -25,14 +26,24 @@ public class SpinWheelMenuController : MonoBehaviour
     [Header("Settings")]
     public int safeZoneFactor = 5;
     public int superZoneFactor = 30;
+    public int reviveCost = 50;
     [SerializeField] private RewardPool[] rewardPoolsByTier;
     
     // Private Fields
     private readonly Dictionary<RewardItem, (SpinWheelItemDisplay display, int amount)> _rewardInventory = new();
     private int _currentTier = 0;
+    private ConsentButtonData _bombContinueButtonData;
+    private ConsentButtonData _bombGiveUpButtonData;
 
     private void Start()
     {
+        _bombContinueButtonData = new ConsentButtonData(
+            buttonAction: OnBombContinue,
+            buttonText: "COST: " + reviveCost + "\nREVIVE",
+            interactableCondition: () => EconomyManager.Instance.PlayerCoins >= reviveCost);
+
+        _bombGiveUpButtonData = new ConsentButtonData(buttonAction: OnBombGiveUp);
+        
         spinButton.onClick.AddListener(OnSpinClicked);
         spinWheel.GenerateRewards(rewardPoolsByTier[_currentTier], 8);
         endlessNumberTextLayout.Initialize(safeZoneFactor, superZoneFactor);
@@ -60,14 +71,17 @@ public class SpinWheelMenuController : MonoBehaviour
 
     private void OnSpinComplete(RewardInfo reward, bool isBomb)
     {
-        if (!isBomb)
+        if (isBomb)
         {
-            AddReward(reward);
-            spinWheel.TryGetRewardDisplay(reward.rewardItem, out var wheelRewardDisplay);
-        
-            if (wheelRewardDisplay != null)
-                StartCoroutine(MoveIconToInventory(wheelRewardDisplay, _rewardInventory[reward.rewardItem].display));
+            TriggerBomb();
+            return;
         }
+        
+        AddReward(reward);
+        spinWheel.TryGetRewardDisplay(reward.rewardItem, out var wheelRewardDisplay);
+    
+        if (wheelRewardDisplay != null)
+            StartCoroutine(MoveIconToInventory(wheelRewardDisplay, _rewardInventory[reward.rewardItem].display));
     }
 
     private void AddReward(RewardInfo reward)
@@ -111,5 +125,41 @@ public class SpinWheelMenuController : MonoBehaviour
         if (endlessNumberTextLayout.Value % superZoneFactor == 0) spinWheel.SetVisual(superSpinWheelVisualData);
         else if (endlessNumberTextLayout.Value % safeZoneFactor == 0) spinWheel.SetVisual(safeSpinWheelVisualData);
         else spinWheel.SetVisual(normalSpinWheelVisualData);
+    }
+    
+    private void TriggerBomb()
+    {
+        bombExplosionMenu.Show(_bombContinueButtonData, _bombGiveUpButtonData);
+    }
+
+    private void OnBombContinue()
+    {
+        if (!EconomyManager.Instance.TrySpendCoins(reviveCost))
+        {
+            OnBombGiveUp();
+            return;
+        }
+        
+        bombExplosionMenu.Hide();
+        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true);
+    }
+    
+    private void OnBombGiveUp()
+    {
+        bombExplosionMenu.Hide();
+        Reset();
+    }
+
+    private void Reset()
+    {
+        foreach (var rewardInventoryValue in _rewardInventory.Values)
+        {
+            Destroy(rewardInventoryValue.display.gameObject);
+        }
+        
+        _rewardInventory.Clear();
+        endlessNumberTextLayout.ResetValue();
+        _currentTier = 0;
+        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true);
     }
 }
