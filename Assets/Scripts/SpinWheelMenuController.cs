@@ -1,15 +1,24 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SpinWheelMenuController : MonoBehaviour
 {
+    // Spin Wheel
     [SerializeField] private SpinWheel spinWheel;
     [SerializeField] private Button spinButton;
+    
+    // Reward Inventory
     [SerializeField] private SpinWheelItemDisplay rewardDisplayPrefab;
     [SerializeField] private Transform inventoryContentParent;
+    
+    // Endless Zone Number Display
+    [SerializeField] private EndlessNumberLayout endlessNumberTextLayout;
+    
+    // Reward Pools
     [SerializeField] private RewardPool[] rewardPoolsByTier;
+    
+    // Private Fields
     private readonly Dictionary<RewardItem, (SpinWheelItemDisplay display, int amount)> _rewardInventory = new();
     private int _currentZone = 1;
     private int _currentTier = 0;
@@ -18,8 +27,8 @@ public class SpinWheelMenuController : MonoBehaviour
     {
         spinButton.onClick.AddListener(OnSpinClicked);
         spinWheel.GenerateRewards(rewardPoolsByTier[_currentTier], 8);
+        endlessNumberTextLayout.Initialize();
     }
-
 
     private void OnValidate()
     {
@@ -32,6 +41,8 @@ public class SpinWheelMenuController : MonoBehaviour
         if (inventoryContentParent == null)
             inventoryContentParent = transform.Find("ui_collected_rewards/ui_layout_collected_rewards");
         
+        if (endlessNumberTextLayout == null)
+            endlessNumberTextLayout = transform.Find("ui_zone_numbers").GetComponent<EndlessNumberLayout>();
     }
 
     private void OnSpinClicked()
@@ -60,5 +71,7 @@ public class SpinWheelMenuController : MonoBehaviour
             newDisplay.SetRewardVisual(reward.rewardItem.RewardIcon, reward.Amount);
             _rewardInventory.Add(reward.rewardItem, (newDisplay, reward.Amount));
         }
+        
+        endlessNumberTextLayout.NextValue();
     }
 }
