@@ -1,8 +1,5 @@
 ### Video
-<p align="center">
-  <video src="./Screenshots/Demo Showcase.mp4" width="600" autoplay loop muted playsinline>
-  </video>
-</p>
+https://github.com/user-attachments/assets/064e53d1-d7f4-4874-adc3-b94f20c7c5e8
 
 ### Screenshots
 
@@ -26,3 +23,4 @@
   <img src="./Screenshots/4-3%20Main.png" width="300">
   <img src="./Screenshots/4-3%20Leave.png" width="300">
 </span>
+
