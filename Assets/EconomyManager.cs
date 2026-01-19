@@ -20,30 +20,30 @@ public class EconomyManager : MonoBehaviour
         }
     }
     
-    public event Action<int> OnCoinsChanged;
+    public event Action<int> OnGoldsChanged;
     
-    public int PlayerCoins { get; private set; }
+    public int PlayerGolds { get; private set; }
     
-    public void AddCoins(int amount)
+    public void AddGolds(int amount)
     {
         if (amount == 0) return;
         
         if (amount < 0)
         {
-            TrySpendCoins(amount);
+            TrySpendGolds(amount);
             return;
         }
         
-        OnCoinsChanged?.Invoke(amount);
-        PlayerCoins += amount;
+        PlayerGolds += amount;
+        OnGoldsChanged?.Invoke(amount);
     }
     
-    public bool TrySpendCoins(int amount)
+    public bool TrySpendGolds(int amount)
     {
-        if (PlayerCoins < amount) return false;
+        if (PlayerGolds < amount) return false;
         
-        PlayerCoins -= amount;
-        OnCoinsChanged?.Invoke(-amount);
+        PlayerGolds -= amount;
+        OnGoldsChanged?.Invoke(-amount);
         return true;
     }
 }

@@ -8,8 +8,8 @@ public class ConsentMenu : MonoBehaviour
     [SerializeField] private Button acceptButton;
     [SerializeField] private Button declineButton;
     
-    public event Action OnAccepted;
-    public event Action OnDeclined;
+    private event Action OnAccepted;
+    private event Action OnDeclined;
     
     public void Show(ConsentButtonData acceptButtonData, ConsentButtonData declineButtonData)
     {
@@ -61,10 +61,18 @@ public class ConsentMenu : MonoBehaviour
     private void OnValidate()
     {
         if (acceptButton == null)
+        {
             acceptButton = transform.Find("ui_button_accept").GetComponent<Button>();
-        
+            acceptButton.onClick.RemoveAllListeners();
+            acceptButton.onClick.AddListener(HandleAccept);
+        }
+
         if (declineButton == null)
+        {
             declineButton = transform.Find("ui_button_decline").GetComponent<Button>();
+            declineButton.onClick.RemoveAllListeners();
+            declineButton.onClick.AddListener(HandleDecline);
+        }
     }
 }
 

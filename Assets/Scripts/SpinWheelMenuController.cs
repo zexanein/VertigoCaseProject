@@ -10,6 +10,7 @@ public class SpinWheelMenuController : MonoBehaviour
     // Spin Wheel
     [SerializeField] private SpinWheel spinWheel;
     [SerializeField] private Button spinButton;
+    [SerializeField] private Button leaveButton;
     
     // Reward Inventory
     [SerializeField] private SpinWheelItemDisplay rewardDisplayPrefab;
@@ -18,6 +19,7 @@ public class SpinWheelMenuController : MonoBehaviour
     // Endless Zone Number Display
     [SerializeField] private EndlessNumberLayout endlessNumberTextLayout;
     [SerializeField] private ConsentMenu bombExplosionMenu;
+    [SerializeField] private ConsentMenu collectAndLeaveMenu;
     
     [SerializeField] private SpinWheelVisualData normalSpinWheelVisualData;
     [SerializeField] private SpinWheelVisualData safeSpinWheelVisualData;
@@ -40,11 +42,12 @@ public class SpinWheelMenuController : MonoBehaviour
         _bombContinueButtonData = new ConsentButtonData(
             buttonAction: OnBombContinue,
             buttonText: "COST: " + reviveCost + "\nREVIVE",
-            interactableCondition: () => EconomyManager.Instance.PlayerCoins >= reviveCost);
+            interactableCondition: () => EconomyManager.Instance.PlayerGolds >= reviveCost);
 
         _bombGiveUpButtonData = new ConsentButtonData(buttonAction: OnBombGiveUp);
         
         spinButton.onClick.AddListener(OnSpinClicked);
+        leaveButton.onClick.AddListener(OnLeaveClicked);
         spinWheel.GenerateRewards(rewardPoolsByTier[_currentTier], 8);
         endlessNumberTextLayout.Initialize(safeZoneFactor, superZoneFactor);
     }
@@ -62,11 +65,28 @@ public class SpinWheelMenuController : MonoBehaviour
         
         if (endlessNumberTextLayout == null)
             endlessNumberTextLayout = transform.Find("ui_zone_numbers").GetComponent<EndlessNumberLayout>();
+        
+        if (leaveButton == null)
+            leaveButton = transform.Find("ui_container_collected_rewards/ui_button_spinwheel_leave").GetComponent<Button>();
     }
 
     private void OnSpinClicked()
     {
         spinWheel.Spin(OnSpinComplete);
+    }
+    
+    private void OnLeaveClicked()
+    {
+        collectAndLeaveMenu.Show(
+            new ConsentButtonData(buttonAction: OnLeaveConfirmed),
+            new ConsentButtonData(buttonAction: collectAndLeaveMenu.Hide));
+    }
+    
+    private void OnLeaveConfirmed()
+    {
+        collectAndLeaveMenu.Hide();
+        CollectRewards();
+        Reset();
     }
 
     private void OnSpinComplete(RewardInfo reward, bool isBomb)
@@ -127,6 +147,25 @@ public class SpinWheelMenuController : MonoBehaviour
         else spinWheel.SetVisual(normalSpinWheelVisualData);
     }
     
+    private void CollectRewards()
+    {
+        foreach (var rewardEntry in _rewardInventory)
+        {
+            CollectReward(rewardEntry.Key, rewardEntry.Value.amount);
+        }
+    }
+
+    private void CollectReward(RewardItem reward, int amount)
+    {
+        Debug.Log($"Collected {amount} x {reward.RewardId}");
+        switch (reward.RewardId)
+        {
+            case "gold":
+                EconomyManager.Instance.AddGolds(amount);
+                break;
+        }
+    }
+    
     private void TriggerBomb()
     {
         bombExplosionMenu.Show(_bombContinueButtonData, _bombGiveUpButtonData);
@@ -134,7 +173,7 @@ public class SpinWheelMenuController : MonoBehaviour
 
     private void OnBombContinue()
     {
-        if (!EconomyManager.Instance.TrySpendCoins(reviveCost))
+        if (!EconomyManager.Instance.TrySpendGolds(reviveCost))
         {
             OnBombGiveUp();
             return;
