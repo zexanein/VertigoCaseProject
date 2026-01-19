@@ -18,12 +18,14 @@ public class SpinWheelMenuController : MonoBehaviour
     // Endless Zone Number Display
     [SerializeField] private EndlessNumberLayout endlessNumberTextLayout;
     
-    // Reward Pools
-    [SerializeField] private RewardPool[] rewardPoolsByTier;
+    [SerializeField] private SpinWheelVisualData normalSpinWheelVisualData;
+    [SerializeField] private SpinWheelVisualData safeSpinWheelVisualData;
+    [SerializeField] private SpinWheelVisualData superSpinWheelVisualData;
     
     [Header("Settings")]
     public int safeZoneFactor = 5;
     public int superZoneFactor = 30;
+    [SerializeField] private RewardPool[] rewardPoolsByTier;
     
     // Private Fields
     private readonly Dictionary<RewardItem, (SpinWheelItemDisplay display, int amount)> _rewardInventory = new();
@@ -104,7 +106,10 @@ public class SpinWheelMenuController : MonoBehaviour
     {
         endlessNumberTextLayout.NextValue();
         var includeBomb = endlessNumberTextLayout.Value % safeZoneFactor != 0;
-        Debug.Log(includeBomb);
         spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb);
+        
+        if (endlessNumberTextLayout.Value % superZoneFactor == 0) spinWheel.SetVisual(superSpinWheelVisualData);
+        else if (endlessNumberTextLayout.Value % safeZoneFactor == 0) spinWheel.SetVisual(safeSpinWheelVisualData);
+        else spinWheel.SetVisual(normalSpinWheelVisualData);
     }
 }

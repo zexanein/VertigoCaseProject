@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class SpinWheel : MonoBehaviour
 {
     [SerializeField] private Sprite bombSprite;
     [SerializeField] private Transform spinWheelTransform;
+    [SerializeField] private Image wheelBaseImage;
+    [SerializeField] private Image wheelIndicatorImage;
     [SerializeField] private SpinWheelItemDisplay itemDisplayPrefab;
     
     private int _numberOfRewards;
@@ -45,7 +48,6 @@ public class SpinWheel : MonoBehaviour
             else SetupBombSlot(itemDisplay, i);
         }
     }
-    
 
     public void RegenerateRewards(RewardPool rewardPool, int numberOfRewards, bool includeBomb = true)
     {
@@ -146,6 +148,12 @@ public class SpinWheel : MonoBehaviour
             .DORotate(new Vector3(0, 0, -targetAngle), 3f, RotateMode.FastBeyond360)
             .SetEase(Ease.InOutCubic)
             .OnComplete(() => onComplete?.Invoke());
+    }
+
+    public void SetVisual(SpinWheelVisualData visualData)
+    {
+        wheelBaseImage.sprite = visualData.WheelBaseSprite;
+        wheelIndicatorImage.sprite = visualData.IndicatorSprite;
     }
     
     private struct RewardSlotData

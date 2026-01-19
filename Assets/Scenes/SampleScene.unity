@@ -251,6 +251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombSprite: {fileID: 21300000, guid: da7b85a3d4075d8479da386adc11cf03, type: 3}
   spinWheelTransform: {fileID: 1598447950}
+  wheelBaseImage: {fileID: 1598447951}
+  wheelIndicatorImage: {fileID: 1271643735}
   itemDisplayPrefab: {fileID: 2833557829347084086, guid: 6727578e8c6d776419d289f5aebc4a8e, type: 3}
 --- !u!1 &469834498
 GameObject:
@@ -1632,10 +1634,13 @@ MonoBehaviour:
   rewardDisplayPrefab: {fileID: 974893633826189436, guid: 6f0f30ba59d04ea49bb8656fec482e91, type: 3}
   inventoryContentParent: {fileID: 1950262203}
   endlessNumberTextLayout: {fileID: 469834500}
-  rewardPoolsByTier:
-  - {fileID: 11400000, guid: 1d4a908039405d340ba4d2fdfd6e84ce, type: 2}
+  normalSpinWheelVisualData: {fileID: 11400000, guid: ea5ca824af23d6f478c9581c250824cf, type: 2}
+  safeSpinWheelVisualData: {fileID: 11400000, guid: d60a41845d850fd4884833d9b756e23f, type: 2}
+  superSpinWheelVisualData: {fileID: 11400000, guid: 0d63eb4bb53888c42b589fdfdb6b1a83, type: 2}
   safeZoneFactor: 5
   superZoneFactor: 30
+  rewardPoolsByTier:
+  - {fileID: 11400000, guid: 1d4a908039405d340ba4d2fdfd6e84ce, type: 2}
 --- !u!1 &1770273948
 GameObject:
   m_ObjectHideFlags: 0
