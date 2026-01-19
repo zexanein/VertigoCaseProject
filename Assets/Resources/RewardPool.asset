@@ -10,30 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b9a57c4736861f4798a8484c5673ad5, type: 3}
-  m_Name: Tier1RewardPool
+  m_Name: RewardPool
   m_EditorClassIdentifier: 
-  rewardInfo:
+  rewardConfig:
   - rewardItem: {fileID: 11400000, guid: d2d137015c1d7a443ac9d2622c896e2e, type: 2}
     minAmount: 1
     maxAmount: 1
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: 5684df7bdea09544fa078625425ff7fd, type: 2}
     minAmount: 1
     maxAmount: 1
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: 39f939df12af2e048acf4b4589f3453d, type: 2}
     minAmount: 100
     maxAmount: 500
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: 1793c9d14c83ba34d88a9470d30a7110, type: 2}
     minAmount: 1
     maxAmount: 1
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: 8014bd09ea0a0424894ece4de1eb64f4, type: 2}
     minAmount: 1
     maxAmount: 1
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: 2781b5aaadcbf3546ade46343ae47caa, type: 2}
     minAmount: 1
-    maxAmount: 5
+    maxAmount: 10
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: fa14726c2a09def4fbc393da172c332c, type: 2}
     minAmount: 1
     maxAmount: 1
+    probabilityWeight: 1
   - rewardItem: {fileID: 11400000, guid: cc56930c8fb581343a4fe1de61753c9b, type: 2}
     minAmount: 1
     maxAmount: 1
+    probabilityWeight: 1

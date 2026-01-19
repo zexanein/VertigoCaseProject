@@ -109,7 +109,7 @@ public class SpinWheelMenuController : MonoBehaviour
         if (_rewardInventory.ContainsKey(reward.rewardItem))
         {
             var existingReward = _rewardInventory[reward.rewardItem];
-            existingReward.amount += reward.Amount;
+            existingReward.amount += reward.amount;
             existingReward.display.SetRewardVisual(reward.rewardItem.RewardIcon, existingReward.amount);
             _rewardInventory[reward.rewardItem] = existingReward;
         }
@@ -117,8 +117,8 @@ public class SpinWheelMenuController : MonoBehaviour
         else
         {
             var newDisplay = Instantiate(rewardDisplayPrefab, inventoryContentParent);
-            newDisplay.SetRewardVisual(reward.rewardItem.RewardIcon, reward.Amount);
-            _rewardInventory.Add(reward.rewardItem, (newDisplay, reward.Amount));
+            newDisplay.SetRewardVisual(reward.rewardItem.RewardIcon, reward.amount);
+            _rewardInventory.Add(reward.rewardItem, (newDisplay, reward.amount));
         }
     }
     
@@ -157,7 +157,6 @@ public class SpinWheelMenuController : MonoBehaviour
 
     private void CollectReward(RewardItem reward, int amount)
     {
-        Debug.Log($"Collected {amount} x {reward.RewardId}");
         switch (reward.RewardId)
         {
             case "gold":

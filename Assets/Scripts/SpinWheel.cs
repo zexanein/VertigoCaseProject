@@ -116,8 +116,7 @@ public class SpinWheel : MonoBehaviour
     
     private void SetupRewardSlot(SpinWheelItemDisplay itemDisplay, RewardInfo rewardInfo, int index)
     {
-        rewardInfo.RecalculateAmount();
-        itemDisplay.SetRewardVisual(rewardInfo.rewardItem.RewardIcon, rewardInfo.Amount);
+        itemDisplay.SetRewardVisual(rewardInfo.rewardItem.RewardIcon, rewardInfo.amount);
         _rewardSlots.Add(itemDisplay, new RewardSlotData(rewardInfo, index));
     }
 
@@ -161,9 +160,9 @@ public class SpinWheel : MonoBehaviour
         public readonly RewardInfo RewardInfo;
         public readonly int Order;
 
-        public RewardSlotData(RewardInfo rewardInfo, int order)
+        public RewardSlotData(RewardInfo rewardConfig, int order)
         {
-            RewardInfo = rewardInfo;
+            RewardInfo = rewardConfig;
             Order = order;
         }
     }
