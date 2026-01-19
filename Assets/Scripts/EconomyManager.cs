@@ -23,7 +23,12 @@ public class EconomyManager : MonoBehaviour
     public event Action<int> OnGoldsChanged;
     
     public int PlayerGolds { get; private set; }
-    
+
+    private void Start()
+    {
+        AddGolds(9999);
+    }
+
     public void AddGolds(int amount)
     {
         if (amount == 0) return;
