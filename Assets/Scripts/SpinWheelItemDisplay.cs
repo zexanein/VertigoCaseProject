@@ -20,4 +20,6 @@ public class SpinWheelItemDisplay : MonoBehaviour
         rewardImage.sprite = bombIcon;
         rewardAmountText.text = "";
     }
+    
+    public Transform GetImageTransform() => rewardImage.transform;
 }

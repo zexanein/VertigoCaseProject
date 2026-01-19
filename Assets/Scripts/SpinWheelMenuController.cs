@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,6 +74,29 @@ public class SpinWheelMenuController : MonoBehaviour
             _rewardInventory.Add(reward.rewardItem, (newDisplay, reward.Amount));
         }
         
+        spinWheel.TryGetRewardDisplay(reward.rewardItem, out var wheelRewardDisplay);
+        
+        if (wheelRewardDisplay != null)
+            StartCoroutine(MoveIconToInventory(wheelRewardDisplay, _rewardInventory[reward.rewardItem].display));
+    }
+    
+    private IEnumerator MoveIconToInventory(SpinWheelItemDisplay fromDisplay, SpinWheelItemDisplay toDisplay)
+    {
+        yield return null;
+        
+        var flyingIcon = Instantiate(toDisplay.GetImageTransform().gameObject, transform);
+        flyingIcon.transform.position = fromDisplay.GetImageTransform().position;
+        flyingIcon.transform.rotation = Quaternion.identity;
+        
+        yield return flyingIcon.transform.DOMove(toDisplay.GetImageTransform().position, 0.6f).SetEase(Ease.InOutQuad).WaitForCompletion();
+        
+        Destroy(flyingIcon.gameObject);
+        OnIconMoveComplete();
+    }
+    
+    private void OnIconMoveComplete()
+    {
         endlessNumberTextLayout.NextValue();
+        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier]);
     }
 }
