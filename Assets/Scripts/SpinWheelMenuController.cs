@@ -31,9 +31,16 @@ public class SpinWheelMenuController : MonoBehaviour
     public int reviveCost = 50;
     [SerializeField] private RewardPool[] rewardPoolsByTier;
     
+    [Header("Progression Settings")]
+    [SerializeField] private int spinsPerTier = 10;
+    [SerializeField] private float baseMultiplierPerTier = 0.5f;
+    [SerializeField] private float progressMultiplierPerTier = 0.3f;
+    [SerializeField] private float superZoneMultiplierBonus = 0.5f;
+    
     // Private Fields
     private readonly Dictionary<RewardItem, (SpinWheelItemDisplay display, int amount)> _rewardInventory = new();
     private int _currentTier = 0;
+    private int _totalSpins = 0;
     private ConsentButtonData _bombContinueButtonData;
     private ConsentButtonData _bombGiveUpButtonData;
 
@@ -48,6 +55,7 @@ public class SpinWheelMenuController : MonoBehaviour
         
         spinButton.onClick.AddListener(OnSpinClicked);
         leaveButton.onClick.AddListener(OnLeaveClicked);
+        
         spinWheel.GenerateRewards(rewardPoolsByTier[_currentTier], 8);
         endlessNumberTextLayout.Initialize(safeZoneFactor, superZoneFactor);
     }
@@ -139,12 +147,46 @@ public class SpinWheelMenuController : MonoBehaviour
     private void OnIconMoveComplete()
     {
         endlessNumberTextLayout.NextValue();
-        var includeBomb = endlessNumberTextLayout.Value % safeZoneFactor != 0;
-        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb);
+        _totalSpins++;
         
-        if (endlessNumberTextLayout.Value % superZoneFactor == 0) spinWheel.SetVisual(superSpinWheelVisualData);
-        else if (endlessNumberTextLayout.Value % safeZoneFactor == 0) spinWheel.SetVisual(safeSpinWheelVisualData);
-        else spinWheel.SetVisual(normalSpinWheelVisualData);
+        UpdateTier();
+        
+        var multiplier = CalculateRewardMultiplier();
+        
+        var includeBomb = endlessNumberTextLayout.Value % safeZoneFactor != 0;
+        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb, multiplier);
+        
+        UpdateWheelVisual();
+    }
+    
+    private void UpdateTier()
+    {
+        _currentTier = Mathf.Min(_totalSpins / spinsPerTier, rewardPoolsByTier.Length - 1);
+    }
+    
+    private float CalculateRewardMultiplier()
+    {
+        var tierMultiplier = 1f + _currentTier * baseMultiplierPerTier;
+        
+        var tierProgress = _totalSpins % spinsPerTier / (float)spinsPerTier;
+        var progressMultiplier = tierProgress * progressMultiplierPerTier;
+        
+        var isSuperZone = endlessNumberTextLayout.Value % superZoneFactor == 0;
+        var superZoneBonus = isSuperZone ? superZoneMultiplierBonus : 0f;
+        
+        var finalMultiplier = tierMultiplier + progressMultiplier + superZoneBonus;
+        
+        return finalMultiplier;
+    }
+    
+    private void UpdateWheelVisual()
+    {
+        if (endlessNumberTextLayout.Value % superZoneFactor == 0)
+            spinWheel.SetVisual(superSpinWheelVisualData);
+        else if (endlessNumberTextLayout.Value % safeZoneFactor == 0)
+            spinWheel.SetVisual(safeSpinWheelVisualData);
+        else
+            spinWheel.SetVisual(normalSpinWheelVisualData);
     }
     
     private void CollectRewards()
@@ -179,7 +221,9 @@ public class SpinWheelMenuController : MonoBehaviour
         }
         
         bombExplosionMenu.Hide();
-        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true);
+        
+        var multiplier = CalculateRewardMultiplier();
+        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true, multiplier);
     }
     
     private void OnBombGiveUp()
@@ -198,6 +242,7 @@ public class SpinWheelMenuController : MonoBehaviour
         _rewardInventory.Clear();
         endlessNumberTextLayout.ResetValue();
         _currentTier = 0;
+        _totalSpins = 0;
         spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true);
     }
 }

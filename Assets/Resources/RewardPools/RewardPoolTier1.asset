@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9a57c4736861f4798a8484c5673ad5, type: 3}
+  m_Name: RewardPoolTier1
+  m_EditorClassIdentifier: 
+  rewardConfig:
+  - rewardItem: {fileID: 11400000, guid: cb9e7472f95c7fe45b0421c95a1f4731, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: 3a1128834dc5ba54eb7ca7eb970bad3b, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: 9d27f288bcb31fc45b2827113a1f61fd, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: ba0f9aee3a45eee41ae67fd6773a654a, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: c1c33daa0a58e4243ad455bdd18d9358, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: 51487dee1b1b6ea4f963f73ab33b2c76, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: ae6db553e626e594ba5f53443b1a5c6d, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: a4f895d4500e10b458c0ef5bc70f6312, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: 87e96ee86a43b0b418804f591b211fec, type: 2}
+    minAmount: 1
+    maxAmount: 30
+    probabilityWeight: 30
+  - rewardItem: {fileID: 11400000, guid: 39f939df12af2e048acf4b4589f3453d, type: 2}
+    minAmount: 100
+    maxAmount: 300
+    probabilityWeight: 100
+  - rewardItem: {fileID: 11400000, guid: 2781b5aaadcbf3546ade46343ae47caa, type: 2}
+    minAmount: 1
+    maxAmount: 10
+    probabilityWeight: 80
+  - rewardItem: {fileID: 11400000, guid: 1793c9d14c83ba34d88a9470d30a7110, type: 2}
+    minAmount: 1
+    maxAmount: 1
+    probabilityWeight: 20
+  - rewardItem: {fileID: 11400000, guid: 8014bd09ea0a0424894ece4de1eb64f4, type: 2}
+    minAmount: 1
+    maxAmount: 1
+    probabilityWeight: 25
+  - rewardItem: {fileID: 11400000, guid: fa14726c2a09def4fbc393da172c332c, type: 2}
+    minAmount: 1
+    maxAmount: 3
+    probabilityWeight: 60
+  - rewardItem: {fileID: 11400000, guid: d6f17e4b974ecae45b00dea7519b83d3, type: 2}
+    minAmount: 1
+    maxAmount: 2
+    probabilityWeight: 50
+  - rewardItem: {fileID: 11400000, guid: 097ee69be3656b34f8906186dcdd1823, type: 2}
+    minAmount: 1
+    maxAmount: 2
+    probabilityWeight: 40
+  - rewardItem: {fileID: 11400000, guid: a536f8f52dfbc2c4ebf6c5d2fa4b22e0, type: 2}
+    minAmount: 1
+    maxAmount: 2
+    probabilityWeight: 40
+  - rewardItem: {fileID: 11400000, guid: 2382dfda7fd77fa4aaa461076b8846b5, type: 2}
+    minAmount: 1
+    maxAmount: 2
+    probabilityWeight: 40
+  - rewardItem: {fileID: 11400000, guid: 3996b681ad792174f991f429a25f5e86, type: 2}
+    minAmount: 1
+    maxAmount: 1
+    probabilityWeight: 30

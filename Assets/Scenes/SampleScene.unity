@@ -3427,6 +3427,13 @@ MonoBehaviour:
   reviveCost: 5
   rewardPoolsByTier:
   - {fileID: 11400000, guid: 1d4a908039405d340ba4d2fdfd6e84ce, type: 2}
+  - {fileID: 11400000, guid: 50af772a986af764cb50dbe5f96cdfbb, type: 2}
+  - {fileID: 11400000, guid: cf9c9e53d5908754da48af4a496d4b26, type: 2}
+  spinsPerTier: 10
+  baseMultiplierPerTier: 0.125
+  progressMultiplierPerTier: 0.075
+  superZoneMultiplierBonus: 0.5
+  _currentTier: 0
 --- !u!1 &1752062679
 GameObject:
   m_ObjectHideFlags: 0
