@@ -251,6 +251,8 @@ public class SpinWheelMenuController : MonoBehaviour
             Destroy(rewardInventoryValue.display.gameObject);
         }
         
+        
+        spinWheel.SetVisual(normalSpinWheelVisualData);
         _rewardInventory.Clear();
         endlessNumberTextLayout.ResetValue();
         _currentTier = 0;
