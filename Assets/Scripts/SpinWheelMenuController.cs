@@ -39,8 +39,8 @@ public class SpinWheelMenuController : MonoBehaviour
     
     // Private Fields
     private readonly Dictionary<RewardItem, (SpinWheelItemDisplay display, int amount)> _rewardInventory = new();
-    private int _currentTier = 0;
-    private int _totalSpins = 0;
+    private int _currentTier;
+    private int _totalSpins;
     private ConsentButtonData _bombContinueButtonData;
     private ConsentButtonData _bombGiveUpButtonData;
 
@@ -80,6 +80,7 @@ public class SpinWheelMenuController : MonoBehaviour
 
     private void OnSpinClicked()
     {
+        ToggleButtons(false);
         spinWheel.Spin(OnSpinComplete);
     }
     
@@ -94,6 +95,7 @@ public class SpinWheelMenuController : MonoBehaviour
     {
         collectAndLeaveMenu.Hide();
         CollectRewards();
+        ToggleButtons(false);
         Reset();
     }
 
@@ -154,9 +156,16 @@ public class SpinWheelMenuController : MonoBehaviour
         var multiplier = CalculateRewardMultiplier();
         
         var includeBomb = endlessNumberTextLayout.Value % safeZoneFactor != 0;
-        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb, multiplier);
+        var regenerateTween = spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb, multiplier);
+        regenerateTween.onComplete += () => { ToggleButtons(true); };
         
         UpdateWheelVisual();
+    }
+    
+    private void ToggleButtons(bool state)
+    {
+        spinButton.interactable = state;
+        leaveButton.interactable = state;
     }
     
     private void UpdateTier()
@@ -193,6 +202,7 @@ public class SpinWheelMenuController : MonoBehaviour
     {
         foreach (var rewardEntry in _rewardInventory)
         {
+            Debug.Log("Collecting Reward: " + rewardEntry.Key.RewardId + " x" + rewardEntry.Value.amount);
             CollectReward(rewardEntry.Key, rewardEntry.Value.amount);
         }
     }
@@ -216,6 +226,7 @@ public class SpinWheelMenuController : MonoBehaviour
     {
         if (!EconomyManager.Instance.TrySpendGolds(reviveCost))
         {
+            Debug.Log("Not enough gold to revive!");
             OnBombGiveUp();
             return;
         }
@@ -223,7 +234,8 @@ public class SpinWheelMenuController : MonoBehaviour
         bombExplosionMenu.Hide();
         
         var multiplier = CalculateRewardMultiplier();
-        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true, multiplier);
+        var regenerateTween = spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true, multiplier);
+        regenerateTween.onComplete += () => { ToggleButtons(true); };
     }
     
     private void OnBombGiveUp()
@@ -243,6 +255,7 @@ public class SpinWheelMenuController : MonoBehaviour
         endlessNumberTextLayout.ResetValue();
         _currentTier = 0;
         _totalSpins = 0;
-        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true);
+        var regenerateTween = spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb: true);
+        regenerateTween.onComplete += () => { ToggleButtons(true); };
     }
 }

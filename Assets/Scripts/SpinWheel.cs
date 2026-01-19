@@ -29,7 +29,6 @@ public class SpinWheel : MonoBehaviour
         ClearExistingRewards();
         
         _numberOfRewards = numberOfRewards;
-        includeBomb = false;
         _bombIndex = includeBomb ? Random.Range(0, _numberOfRewards) : -1;
         var rewardCount = includeBomb ? _numberOfRewards - 1 : _numberOfRewards;
         
@@ -50,7 +49,7 @@ public class SpinWheel : MonoBehaviour
         }
     }
 
-    public void RegenerateRewards(RewardPool rewardPool, int numberOfRewards, bool includeBomb = true, float amountMultiplier = 1f)
+    public Tween RegenerateRewards(RewardPool rewardPool, int numberOfRewards, bool includeBomb = true, float amountMultiplier = 1f)
     {
         _regenerateTween?.Complete();
         
@@ -73,6 +72,8 @@ public class SpinWheel : MonoBehaviour
                 display.transform.DOPunchScale(Vector3.one * 0.5f, 0.4f, vibrato: 0).SetEase(Ease.OutBack);
             }
         });
+        
+        return _regenerateTween;
     }
 
     private void ClearExistingRewards()
@@ -123,7 +124,8 @@ public class SpinWheel : MonoBehaviour
 
     public void Spin(SpinCompleteHandler onComplete = null)
     {
-        var earnedSlotIndex = Random.Range(0, _numberOfRewards);
+        //var earnedSlotIndex = Random.Range(0, _numberOfRewards);
+        var earnedSlotIndex = _bombIndex;
         var earnedSlotData = GetRewardDataAtIndex(earnedSlotIndex);
         
         var isBomb = earnedSlotIndex == _bombIndex;

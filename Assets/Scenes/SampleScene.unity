@@ -187,9 +187,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3433,7 +3433,6 @@ MonoBehaviour:
   baseMultiplierPerTier: 0.125
   progressMultiplierPerTier: 0.075
   superZoneMultiplierBonus: 0.5
-  _currentTier: 0
 --- !u!1 &1752062679
 GameObject:
   m_ObjectHideFlags: 0
