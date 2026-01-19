@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class SpinWheelMenuController : MonoBehaviour
 {
+    [Header("References")]
     // Spin Wheel
     [SerializeField] private SpinWheel spinWheel;
     [SerializeField] private Button spinButton;
@@ -20,16 +21,19 @@ public class SpinWheelMenuController : MonoBehaviour
     // Reward Pools
     [SerializeField] private RewardPool[] rewardPoolsByTier;
     
+    [Header("Settings")]
+    public int safeZoneFactor = 5;
+    public int superZoneFactor = 30;
+    
     // Private Fields
     private readonly Dictionary<RewardItem, (SpinWheelItemDisplay display, int amount)> _rewardInventory = new();
-    private int _currentZone = 1;
     private int _currentTier = 0;
 
     private void Start()
     {
         spinButton.onClick.AddListener(OnSpinClicked);
         spinWheel.GenerateRewards(rewardPoolsByTier[_currentTier], 8);
-        endlessNumberTextLayout.Initialize();
+        endlessNumberTextLayout.Initialize(safeZoneFactor, superZoneFactor);
     }
 
     private void OnValidate()
@@ -54,7 +58,14 @@ public class SpinWheelMenuController : MonoBehaviour
 
     private void OnSpinComplete(RewardInfo reward, bool isBomb)
     {
-        if (!isBomb) AddReward(reward);
+        if (!isBomb)
+        {
+            AddReward(reward);
+            spinWheel.TryGetRewardDisplay(reward.rewardItem, out var wheelRewardDisplay);
+        
+            if (wheelRewardDisplay != null)
+                StartCoroutine(MoveIconToInventory(wheelRewardDisplay, _rewardInventory[reward.rewardItem].display));
+        }
     }
 
     private void AddReward(RewardInfo reward)
@@ -73,11 +84,6 @@ public class SpinWheelMenuController : MonoBehaviour
             newDisplay.SetRewardVisual(reward.rewardItem.RewardIcon, reward.Amount);
             _rewardInventory.Add(reward.rewardItem, (newDisplay, reward.Amount));
         }
-        
-        spinWheel.TryGetRewardDisplay(reward.rewardItem, out var wheelRewardDisplay);
-        
-        if (wheelRewardDisplay != null)
-            StartCoroutine(MoveIconToInventory(wheelRewardDisplay, _rewardInventory[reward.rewardItem].display));
     }
     
     private IEnumerator MoveIconToInventory(SpinWheelItemDisplay fromDisplay, SpinWheelItemDisplay toDisplay)
@@ -97,6 +103,8 @@ public class SpinWheelMenuController : MonoBehaviour
     private void OnIconMoveComplete()
     {
         endlessNumberTextLayout.NextValue();
-        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier]);
+        var includeBomb = endlessNumberTextLayout.Value % safeZoneFactor != 0;
+        Debug.Log(includeBomb);
+        spinWheel.RegenerateRewards(rewardPoolsByTier[_currentTier], 8, includeBomb);
     }
 }

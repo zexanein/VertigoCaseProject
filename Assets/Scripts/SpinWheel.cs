@@ -21,14 +21,15 @@ public class SpinWheel : MonoBehaviour
     
     public delegate void SpinCompleteHandler(RewardInfo reward, bool isBomb);
     
-    public void GenerateRewards(RewardPool rewardPool, int numberOfRewards)
+    public void GenerateRewards(RewardPool rewardPool, int numberOfRewards, bool includeBomb = true)
     {
         ClearExistingRewards();
         
         _numberOfRewards = numberOfRewards;
-        _bombIndex = Random.Range(0, _numberOfRewards);
+        _bombIndex = includeBomb ? Random.Range(0, _numberOfRewards) : -1;
+        var rewardCount = includeBomb ? _numberOfRewards - 1 : _numberOfRewards;
         
-        var availableRewards = rewardPool.GetRandomRewards(_numberOfRewards - 1);
+        var availableRewards = rewardPool.GetRandomRewards(rewardCount);
         _rewardSlots.Clear();
         
         for (var i = 0; i < _numberOfRewards; i++)
@@ -46,7 +47,7 @@ public class SpinWheel : MonoBehaviour
     }
     
 
-    public void RegenerateRewards(RewardPool rewardPool)
+    public void RegenerateRewards(RewardPool rewardPool, int numberOfRewards, bool includeBomb = true)
     {
         _regenerateTween?.Complete();
         
@@ -59,7 +60,7 @@ public class SpinWheel : MonoBehaviour
         {
             if (_regenerateTween.ElapsedPercentage() <= 0.5f || isHalfwayPassed) return;
             isHalfwayPassed = true;
-            GenerateRewards(rewardPool, _numberOfRewards);
+            GenerateRewards(rewardPool, numberOfRewards, includeBomb);
         });
         
         _regenerateTween.OnComplete(() =>
