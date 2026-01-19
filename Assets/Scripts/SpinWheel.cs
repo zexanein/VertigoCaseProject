@@ -124,8 +124,7 @@ public class SpinWheel : MonoBehaviour
 
     public void Spin(SpinCompleteHandler onComplete = null)
     {
-        //var earnedSlotIndex = Random.Range(0, _numberOfRewards);
-        var earnedSlotIndex = _bombIndex;
+        var earnedSlotIndex = Random.Range(0, _numberOfRewards);
         var earnedSlotData = GetRewardDataAtIndex(earnedSlotIndex);
         
         var isBomb = earnedSlotIndex == _bombIndex;
